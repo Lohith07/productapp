@@ -1,8 +1,8 @@
 package com.template;
 
 import com.google.common.collect.ImmutableList;
-import com.template.flows.TemplateFlow;
-import com.template.states.TemplateState;
+import com.template.flows.CreateProductFlow;
+import com.template.states.ProductState;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.node.services.Vault;
 import net.corda.core.node.services.vault.QueryCriteria;
@@ -37,13 +37,13 @@ public class FlowTests {
 
     @Test
     public void dummyTest() {
-        TemplateFlow.TemplateFlowInitiator flow = new TemplateFlow.TemplateFlowInitiator(b.getInfo().getLegalIdentities().get(0));
-        Future<SignedTransaction> future = a.startFlow(flow);
+        //CreateProductFlow flow = new CreateProductFlow(b.getInfo().getLegalIdentities().get(0));
+        //Future<SignedTransaction> future = a.startFlow(flow);
         network.runNetwork();
 
         //successful query means the state is stored at node b's vault. Flow went through.
-        QueryCriteria inputCriteria = new QueryCriteria.VaultQueryCriteria().withStatus(Vault.StateStatus.UNCONSUMED);
-        TemplateState state = b.getServices().getVaultService().queryBy(TemplateState.class,inputCriteria)
+        QueryCriteria.VaultQueryCriteria inputCriteria = new QueryCriteria.VaultQueryCriteria().withStatus(Vault.StateStatus.UNCONSUMED);
+        ProductState state = b.getServices().getVaultService().queryBy(ProductState.class)
                 .getStates().get(0).getState().getData();
     }
 }

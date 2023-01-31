@@ -3,8 +3,9 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="R3.Corda" id="create_product_state">
+    <changeSet author="lohith.product" id="create_product_state">
         <createTable tableName="PRODUCT">
+            <column name="output_index" type="INT"/>
             <column name="PRODUCT_ID" type="INT"/>
             <column name="NAME" type="NVARCHAR(64)"/>
             <column name="DESCRIPTION" type="NVARCHAR(64)"/>

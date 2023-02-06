@@ -2,7 +2,9 @@ package com.template.webserver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.template.flows.CreateProductFlow;
+import com.template.flows.UpdateProductFlow;
 import com.template.states.ProductState;
+import net.corda.client.jackson.JacksonSupport;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.messaging.CordaRPCOps;
@@ -16,10 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -40,13 +39,12 @@ public class Controller {
     private final CordaX500Name me;
     private final static Logger logger = LoggerFactory.getLogger(Controller.class);
 
-
     public Controller(NodeRPCConnection rpc) {
         this.proxy = rpc.proxy;
         this.me = proxy.nodeInfo().getLegalIdentities().get(0).getName();
     }
 
-    public String toDisplayString(X500Name name){
+    public String toDisplayString(X500Name name) {
         return BCStyle.INSTANCE.toString(name);
     }
 
@@ -56,21 +54,22 @@ public class Controller {
                 .collect(Collectors.toList()).isEmpty();
     }
 
-    private boolean isMe(NodeInfo nodeInfo){
+    private boolean isMe(NodeInfo nodeInfo) {
         return nodeInfo.getLegalIdentities().get(0).getName().equals(me);
     }
 
-    private boolean isNetworkMap(NodeInfo nodeInfo){
+    private boolean isNetworkMap(NodeInfo nodeInfo) {
         return nodeInfo.getLegalIdentities().get(0).getName().getOrganisation().equals("Network Map Service");
     }
 
-    @Configuration
-    class Plugin {
-        @Bean
-        public ObjectMapper registerModule() {
-            return JacksonSupport.createNonRpcMapper();
-        }
-    }
+     @Configuration
+     class Plugin {
+     @Bean
+     public ObjectMapper registerModule() {
+     return JacksonSupport.createNonRpcMapper();
+     }
+     }
+
 
     @GetMapping(value = "/status", produces = TEXT_PLAIN_VALUE)
     private String status() {
@@ -117,44 +116,92 @@ public class Controller {
         return myMap;
     }
 
-    @GetMapping(value = "/me",produces = APPLICATION_JSON_VALUE)
-    private HashMap<String, String> whoami(){
+    @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
+    private HashMap<String, String> whoami() {
         HashMap<String, String> myMap = new HashMap<>();
         myMap.put("me", me.toString());
         return myMap;
     }
 
-    @GetMapping(value = "/products",produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/products", produces = APPLICATION_JSON_VALUE)
     public List<StateAndRef<ProductState>> getProducts() {
         return proxy.vaultQuery(ProductState.class).getStates();
     }
 
-    @PostMapping(value = "create-product" , produces =  TEXT_PLAIN_VALUE , headers =  "Content-Type=application/x-www-form-urlencoded" )
-    public ResponseEntity<String> issueIOU(HttpServletRequest request) throws IllegalArgumentException {
+    @PostMapping(value = "create-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    public ResponseEntity<String> product(HttpServletRequest request) throws IllegalArgumentException {
         int product_id = Integer.valueOf(request.getParameter("ProductID"));
-        String name= request.getParameter("Name");
+        String name = request.getParameter("Name");
         String description = request.getParameter("Description");
-        int quantity = Integer. valueOf(request.getParameter("Quantity"));
-
-
+        int quantity = Integer.valueOf(request.getParameter("Quantity"));
 
         try {
 
-            SignedTransaction result = proxy.startTrackedFlowDynamic(CreateProductFlow.class, product_id, name, description, quantity).getReturnValue().get();
+            SignedTransaction result = proxy
+                    .startTrackedFlowDynamic(CreateProductFlow.class, product_id, name, description, quantity)
+                    .getReturnValue().get();
             // Return the response.
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body("Transaction id "+ result.getId() +" committed to ledger.\n " + result.getTx().getOutput(0));
+                    .body("Transaction id " + result.getId() + " committed to ledger.\n "
+                            + result.getTx().getOutput(0));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
         }
     }
-    @GetMapping(value = "my-products",produces = APPLICATION_JSON_VALUE)
+
+    @PutMapping (value = "create-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    public ResponseEntity<String> updateproduct(HttpServletRequest request) throws IllegalArgumentException {
+        int product_id = Integer.valueOf(request.getParameter("ProductID"));
+        String name = request.getParameter("Name");
+        String description = request.getParameter("Description");
+        int quantity = Integer.valueOf(request.getParameter("Quantity"));
+
+        try {
+
+            SignedTransaction result = proxy
+                    .startTrackedFlowDynamic(UpdateProductFlow.class, product_id, name, description, quantity)
+                    .getReturnValue().get();
+            // Return the response.
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Transaction id " + result.getId() + " committed to ledger.\n "
+                            + result.getTx().getOutput(0));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+    @PostMapping (value = "create-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    public ResponseEntity<String> transferproduct(HttpServletRequest request) throws IllegalArgumentException {
+        int product_id = Integer.valueOf(request.getParameter("ProductID"));
+        String new_owner = request.getParameter("newowner");
+
+        try {
+
+            SignedTransaction result = proxy
+                    .startTrackedFlowDynamic(UpdateProductFlow.class, product_id, new_owner)
+                    .getReturnValue().get();
+            // Return the response.
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Transaction id " + result.getId() + " committed to ledger.\n "
+                            + result.getTx().getOutput(0));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+    @GetMapping(value = "my-products", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StateAndRef<ProductState>>> getMyProducts() {
         List<StateAndRef<ProductState>> myproducts = proxy.vaultQuery(ProductState.class).getStates().stream().filter(
-                it -> it.getState().getData().getowner().equals(proxy.nodeInfo().getLegalIdentities().get(0))).collect(Collectors.toList());
+                it -> it.getState().getData().getowner().equals(proxy.nodeInfo().getLegalIdentities().get(0)))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(myproducts);
     }
 }

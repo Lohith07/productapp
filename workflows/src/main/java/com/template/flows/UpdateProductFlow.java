@@ -24,10 +24,14 @@ import net.corda.core.transactions.TransactionBuilder;
 public class UpdateProductFlow extends FlowLogic<SignedTransaction> {
 
         private Integer ProductID;
+        private String Name;
+        private String Description;
         private Integer Quantity;
 
-        public UpdateProductFlow(Integer ProductID, Integer Quantity) {
+        public UpdateProductFlow(Integer ProductID,String Name,String Description, Integer Quantity) {
                 this.ProductID = ProductID;
+                this.Name=Name;
+                this.Description=Description;
                 this.Quantity = Quantity;
 
         }
@@ -50,8 +54,8 @@ public class UpdateProductFlow extends FlowLogic<SignedTransaction> {
                 final Party notary = getServiceHub().getNetworkMapCache()
                                 .getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"));
 
-                final ProductState output = new ProductState(inputState.getProductID(), inputState.getName(),
-                                inputState.getDescription(), Quantity,
+                final ProductState output = new ProductState(inputState.getProductID(), Name,
+                                Description, Quantity,
                                 inputState.getLinearId(),
                                 me);
 

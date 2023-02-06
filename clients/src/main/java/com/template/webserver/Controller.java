@@ -2,6 +2,7 @@ package com.template.webserver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.template.flows.CreateProductFlow;
+import com.template.flows.TransferProductFlow;
 import com.template.flows.UpdateProductFlow;
 import com.template.states.ProductState;
 import net.corda.client.jackson.JacksonSupport;
@@ -152,7 +153,7 @@ public class Controller {
         }
     }
 
-    @PutMapping (value = "create-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    @PutMapping (value = "update-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
     public ResponseEntity<String> updateproduct(HttpServletRequest request) throws IllegalArgumentException {
         int product_id = Integer.valueOf(request.getParameter("ProductID"));
         String name = request.getParameter("Name");
@@ -176,7 +177,7 @@ public class Controller {
         }
     }
 
-    @PostMapping (value = "create-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    @PostMapping (value = "transfer-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
     public ResponseEntity<String> transferproduct(HttpServletRequest request) throws IllegalArgumentException {
         int product_id = Integer.valueOf(request.getParameter("ProductID"));
         String new_owner = request.getParameter("newowner");
@@ -184,7 +185,7 @@ public class Controller {
         try {
 
             SignedTransaction result = proxy
-                    .startTrackedFlowDynamic(UpdateProductFlow.class, product_id, new_owner)
+                    .startTrackedFlowDynamic(TransferProductFlow.Initiator.class, product_id, new_owner)
                     .getReturnValue().get();
             // Return the response.
             return ResponseEntity

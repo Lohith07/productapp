@@ -24,8 +24,34 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ProductID",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Name",
+							"value": "asd",
+							"type": "text"
+						},
+						{
+							"key": "Description",
+							"value": "asdfg",
+							"type": "text"
+						},
+						{
+							"key": "Quantity",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:50011/create-product"
 			},
 			"response": []
 		},

@@ -19,18 +19,6 @@
 		},
 		{
 			"name": "New Request",
-			"id": "7fd7a80a-a201-43d7-905b-54140c001b79",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
 			"id": "effb8f2c-ef65-40d9-b261-d4079a677a18",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

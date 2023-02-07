@@ -54,7 +54,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "transfer-product",
 			"id": "21735d75-8980-48fd-a855-59877084e45a",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

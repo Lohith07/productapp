@@ -13,7 +13,8 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://localhost:50011/products"
 			},
 			"response": []
 		},

@@ -65,35 +65,32 @@
 			"request": {
 				"method": "PUT",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:50011/update-product?ProductID=1&Name=rishi&Description=rishith&Quantity=3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "50011",
-					"path": [
-						"update-product"
-					],
-					"query": [
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
 						{
 							"key": "ProductID",
-							"value": "1"
+							"value": "1",
+							"type": "text"
 						},
 						{
 							"key": "Name",
-							"value": "rishi"
+							"value": "rishi",
+							"type": "text"
 						},
 						{
 							"key": "Description",
-							"value": "rishith"
+							"value": "rishith",
+							"type": "text"
 						},
 						{
 							"key": "Quantity",
-							"value": "3"
+							"value": "3",
+							"type": "text"
 						}
 					]
-				}
+				},
+				"url": "http://localhost:50011/update-product"
 			},
 			"response": []
 		},

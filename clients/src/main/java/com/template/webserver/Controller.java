@@ -7,10 +7,15 @@ import com.template.flows.UpdateProductFlow;
 import com.template.states.ProductState;
 import net.corda.client.jackson.JacksonSupport;
 import net.corda.core.contracts.StateAndRef;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.CordaX500Name;
+import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
 import net.corda.core.transactions.SignedTransaction;
+import net.corda.core.utilities.NetworkHostAndPort;
+
+import org.apache.activemq.artemis.core.postoffice.Address;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.slf4j.Logger;
@@ -21,9 +26,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,12 +45,19 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 public class Controller {
     private final CordaRPCOps proxy;
     private final CordaX500Name me;
+    private final List<NetworkHostAndPort> currentuser;
     private final static Logger logger = LoggerFactory.getLogger(Controller.class);
 
     public Controller(NodeRPCConnection rpc) {
         this.proxy = rpc.proxy;
         this.me = proxy.nodeInfo().getLegalIdentities().get(0).getName();
+        this.currentuser = proxy.nodeInfo().getAddresses();
     }
+
+    // val rpcAddress = NetworkHostAndPort(host, rpcPort);
+    // Address rpcClient = CordaRPCClient(rpcAddress);
+    // val rpcConnection = rpcClient.start(username, password);
+    // val cordaRPCOps = rpcConnection.proxy;
 
     public String toDisplayString(X500Name name) {
         return BCStyle.INSTANCE.toString(name);
@@ -63,14 +77,13 @@ public class Controller {
         return nodeInfo.getLegalIdentities().get(0).getName().getOrganisation().equals("Network Map Service");
     }
 
-     @Configuration
-     class Plugin {
-     @Bean
-     public ObjectMapper registerModule() {
-     return JacksonSupport.createNonRpcMapper();
-     }
-     }
-
+    @Configuration
+    class Plugin {
+        @Bean
+        public ObjectMapper registerModule() {
+            return JacksonSupport.createNonRpcMapper();
+        }
+    }
 
     @GetMapping(value = "/status", produces = TEXT_PLAIN_VALUE)
     private String status() {
@@ -124,6 +137,13 @@ public class Controller {
         return myMap;
     }
 
+    @GetMapping(value = "/currentuser", produces = APPLICATION_JSON_VALUE)
+    private HashMap<String, String> currentuser() {
+        HashMap<String, String> myMap = new HashMap<>();
+        myMap.put("me", currentuser.toString());
+        return myMap;
+    }
+
     @GetMapping(value = "/products", produces = APPLICATION_JSON_VALUE)
     public List<StateAndRef<ProductState>> getProducts() {
         return proxy.vaultQuery(ProductState.class).getStates();
@@ -153,7 +173,7 @@ public class Controller {
         }
     }
 
-    @PutMapping (value = "update-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
+    @PutMapping(value = "update-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
     public ResponseEntity<String> updateproduct(HttpServletRequest request) throws IllegalArgumentException {
         int product_id = Integer.valueOf(request.getParameter("ProductID"));
         String name = request.getParameter("Name");
@@ -177,17 +197,20 @@ public class Controller {
         }
     }
 
-    @PostMapping (value = "transfer-product", produces = TEXT_PLAIN_VALUE, headers = "Content-Type=application/x-www-form-urlencoded")
-    public ResponseEntity<String> transferproduct(HttpServletRequest request) throws IllegalArgumentException {
-        int product_id = Integer.valueOf(request.getParameter("ProductID"));
-        String new_owner = request.getParameter("newowner");
-
+    @GetMapping(value = "transfer-product", produces = TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> transferproduct(@RequestParam(value = "Productid") Integer Productid,
+    @RequestParam(value = "newowner") String newowner) throws IllegalArgumentException {
+        //UniqueIdentifier Prod_Id = new UniqueIdentifier(null,UUID.fromString(Productid));
+        Party new_owner = proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(newowner));
+        // System.out.println(Prod_Id);
+        System.out.println(new_owner);
         try {
 
             SignedTransaction result = proxy
-                    .startTrackedFlowDynamic(TransferProductFlow.Initiator.class, product_id, new_owner)
+                    .startTrackedFlowDynamic(TransferProductFlow.Initiator.class, Productid, new_owner)
                     .getReturnValue().get();
             // Return the response.
+            System.out.println(result);
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body("Transaction id " + result.getId() + " committed to ledger.\n "
@@ -198,6 +221,7 @@ public class Controller {
                     .body(e.getMessage());
         }
     }
+
     @GetMapping(value = "my-products", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StateAndRef<ProductState>>> getMyProducts() {
         List<StateAndRef<ProductState>> myproducts = proxy.vaultQuery(ProductState.class).getStates().stream().filter(

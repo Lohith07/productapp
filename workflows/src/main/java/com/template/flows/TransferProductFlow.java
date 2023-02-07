@@ -51,36 +51,27 @@ public class TransferProductFlow {
             ProductState inputState = inputStateAndRef.getState().getData();
 
             FlowSession newOwnerSession = initiateFlow(newowner);
-            SignedTransaction fullySignedTx = null;
-            if (((inputState.getowner().equals("O=Supplier, L=London, C=GB")) && (newowner.equals("O=Manufacturer, L=Delhi, C=IN"))) ||
-                    ((inputState.getowner().equals("O=Manufacturer, L=Delhi, C=IN")) && (newowner.equals("O=Wholesaler, L=Mumbai, C=IN")))) {
 
-                final ProductState output = new ProductState(inputState.getProductID(), inputState.getName(),
-                        inputState.getDescription(), inputState.getQuantity(),
-                        inputState.getLinearId(),
-                        newowner);
+            final ProductState output = new ProductState(inputState.getProductID(), inputState.getName(),
+                    inputState.getDescription(), inputState.getQuantity(),
+                    inputState.getLinearId(),
+                    newowner);
 
-                final Command<ProductContract.Commands.Transfer> txCommand = new Command<>(
-                        new ProductContract.Commands.Transfer(),
-                        Arrays.asList(me.getOwningKey(), newowner.getOwningKey()));
+            final Command<ProductContract.Commands.Transfer> txCommand = new Command<>(
+                    new ProductContract.Commands.Transfer(),
+                    Arrays.asList(me.getOwningKey(), newowner.getOwningKey()));
 
-                final TransactionBuilder txBuilder = new TransactionBuilder(notary)
-                        .addInputState(inputStateAndRef).addOutputState(output, ProductContract.ID)
-                        .addCommand(txCommand);
+            final TransactionBuilder txBuilder = new TransactionBuilder(notary)
+                    .addInputState(inputStateAndRef).addOutputState(output, ProductContract.ID)
+                    .addCommand(txCommand);
 
-                txBuilder.verify(getServiceHub());
+            txBuilder.verify(getServiceHub());
 
-                final SignedTransaction partSignedTx = getServiceHub().signInitialTransaction(txBuilder);
+            final SignedTransaction partSignedTx = getServiceHub().signInitialTransaction(txBuilder);
 
+            SignedTransaction fullySignedTx = subFlow(
+                    new CollectSignaturesFlow(partSignedTx, Arrays.asList(newOwnerSession)));
 
-                fullySignedTx = subFlow(
-                        new CollectSignaturesFlow(partSignedTx, Arrays.asList(newOwnerSession)));
-
-
-            }
-            else{
-                return null;
-            }
             return subFlow(new FinalityFlow(fullySignedTx, Arrays.asList(newOwnerSession)));
         }
     }
@@ -105,7 +96,7 @@ public class TransferProductFlow {
                 @Override
                 protected void checkTransaction(SignedTransaction stx) {
                     requireThat(require -> {
-//                        ProductState output = stx.getTx().getOutputs().get(0).getData();
+
                         ProductState output = (ProductState) stx.getTx().getOutputs().get(0).getData();
                         require.using("This must be an IOU transaction.", output instanceof ProductState);
                         ProductState iou = (ProductState) output;
@@ -117,7 +108,7 @@ public class TransferProductFlow {
             final SignTxFlow signTxFlow = new SignTxFlow(otherPartySession);
             final SecureHash txId = subFlow(signTxFlow).getId();
 
-            return subFlow(new ReceiveFinalityFlow(otherPartySession,txId));
+            return subFlow(new ReceiveFinalityFlow(otherPartySession, txId));
         }
     }
 }

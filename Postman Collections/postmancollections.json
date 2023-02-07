@@ -49,7 +49,30 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "http://localhost:50011/transfer-product?Productid=1&newowner=O=Manufacturer, L=Delhi, C=IN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "50011",
+					"path": [
+						"transfer-product"
+					],
+					"query": [
+						{
+							"key": "Productid",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "newowner",
+							"value": "O=Manufacturer, L=Delhi, C=IN",
+							"type": "text"
+						}
+					]
+				}
 			},
 			"response": []
 		}

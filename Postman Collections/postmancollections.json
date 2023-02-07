@@ -63,7 +63,7 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"url": {
 					"raw": "http://localhost:50011/update-product?ProductID=1&Name=asd&Description=asdfg&Quantity=3",
@@ -78,23 +78,19 @@
 					"query": [
 						{
 							"key": "ProductID",
-							"value": "1",
-							"type": "text"
+							"value": "1"
 						},
 						{
 							"key": "Name",
-							"value": "asd",
-							"type": "text"
+							"value": "asd"
 						},
 						{
 							"key": "Description",
-							"value": "asdfg",
-							"type": "text"
+							"value": "asdfg"
 						},
 						{
 							"key": "Quantity",
-							"value": "3",
-							"type": "text"
+							"value": "3"
 						}
 					]
 				}

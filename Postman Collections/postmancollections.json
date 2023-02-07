@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "f0d0a33f-098f-4619-89ef-cbec9ab05d32",
+		"name": "product app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "details",
+			"id": "55de35d1-39b6-4610-a213-d37e08e17b16",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:50011/products"
+			},
+			"response": []
+		},
+		{
+			"name": "create-product",
+			"id": "eb266849-5049-4d74-a5e7-8dac7f3bf321",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ProductID",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Name",
+							"value": "asd",
+							"type": "text"
+						},
+						{
+							"key": "Description",
+							"value": "asdfg",
+							"type": "text"
+						},
+						{
+							"key": "Quantity",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:50011/create-product"
+			},
+			"response": []
+		},
+		{
+			"name": "update-product",
+			"id": "caafe5e6-d510-4e14-8ff0-041226b803e3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ProductID",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "Name",
+							"value": "rishi",
+							"type": "text"
+						},
+						{
+							"key": "Description",
+							"value": "rishith",
+							"type": "text"
+						},
+						{
+							"key": "Quantity",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:50011/update-product"
+			},
+			"response": []
+		},
+		{
+			"name": "transfer-product",
+			"id": "21735d75-8980-48fd-a855-59877084e45a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:50011/transfer-product?Productid=1&newowner=O=Manufacturer, L=Delhi, C=IN",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "50011",
+					"path": [
+						"transfer-product"
+					],
+					"query": [
+						{
+							"key": "Productid",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "newowner",
+							"value": "O=Manufacturer, L=Delhi, C=IN",
+							"type": "text"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

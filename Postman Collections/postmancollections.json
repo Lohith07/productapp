@@ -66,7 +66,7 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:50011/update-product?ProductID=1&Name=asd&Description=asdfg&Quantity=3",
+					"raw": "http://localhost:50011/update-product?ProductID=1&Name=rishi&Description=rishith&Quantity=3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -82,11 +82,11 @@
 						},
 						{
 							"key": "Name",
-							"value": "asd"
+							"value": "rishi"
 						},
 						{
 							"key": "Description",
-							"value": "asdfg"
+							"value": "rishith"
 						},
 						{
 							"key": "Quantity",

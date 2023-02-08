@@ -5,32 +5,32 @@ import com.template.flows.CreateProductFlow;
 import com.template.flows.TransferProductFlow;
 import com.template.flows.UpdateProductFlow;
 import com.template.states.ProductState;
+
+import co.paralleluniverse.strands.channels.Port;
 import net.corda.client.jackson.JacksonSupport;
+import net.corda.client.rpc.CordaRPCClient;
+import net.corda.client.rpc.CordaRPCConnection;
 import net.corda.core.contracts.StateAndRef;
-import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.utilities.NetworkHostAndPort;
-
-import org.apache.activemq.artemis.core.postoffice.Address;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,19 +45,32 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 public class Controller {
     private final CordaRPCOps proxy;
     private final CordaX500Name me;
-    private final List<NetworkHostAndPort> currentuser;
+    private CordaRPCConnection rpcConnection;
+
     private final static Logger logger = LoggerFactory.getLogger(Controller.class);
 
     public Controller(NodeRPCConnection rpc) {
         this.proxy = rpc.proxy;
         this.me = proxy.nodeInfo().getLegalIdentities().get(0).getName();
-        this.currentuser = proxy.nodeInfo().getAddresses();
     }
 
-    // val rpcAddress = NetworkHostAndPort(host, rpcPort);
-    // Address rpcClient = CordaRPCClient(rpcAddress);
-    // val rpcConnection = rpcClient.start(username, password);
-    // val cordaRPCOps = rpcConnection.proxy;
+    @Value("${config.rpc.host}")
+    private String host;
+    // The RPC port of the node we are connecting to.
+    @Value("${config.rpc.username}")
+    private String username;
+    // The username for logging into the RPC client.
+    @Value("${config.rpc.password}")
+    private String password;
+    // The password for logging into the RPC client.
+    @Value("${config.rpc.port}")
+    private String rpcPort;
+
+    @Value("${server.port}")
+    private String serverPort;
+    // NetworkHostAndPort rpcAddress = new NetworkHostAndPort(host, rpcPort);
+    // CordaRPCClient rpcClient = new CordaRPCClient(rpcAddress);
+
 
     public String toDisplayString(X500Name name) {
         return BCStyle.INSTANCE.toString(name);
@@ -140,7 +153,16 @@ public class Controller {
     @GetMapping(value = "/currentuser", produces = APPLICATION_JSON_VALUE)
     private HashMap<String, String> currentuser() {
         HashMap<String, String> myMap = new HashMap<>();
-        myMap.put("me", currentuser.toString());
+        myMap.put("host", host);
+        myMap.put("username", username);
+        myMap.put("pass", password);
+        myMap.put("port", rpcPort);
+        myMap.put("port", serverPort);
+
+        for(Map.Entry m : myMap.entrySet()){    
+            System.out.println(m.getKey()+" "+m.getValue());    
+           }  
+        
         return myMap;
     }
 
@@ -199,8 +221,9 @@ public class Controller {
 
     @GetMapping(value = "transfer-product", produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> transferproduct(@RequestParam(value = "Productid") Integer Productid,
-    @RequestParam(value = "newowner") String newowner) throws IllegalArgumentException {
-        //UniqueIdentifier Prod_Id = new UniqueIdentifier(null,UUID.fromString(Productid));
+            @RequestParam(value = "newowner") String newowner) throws IllegalArgumentException {
+        // UniqueIdentifier Prod_Id = new
+        // UniqueIdentifier(null,UUID.fromString(Productid));
         Party new_owner = proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(newowner));
         // System.out.println(Prod_Id);
         System.out.println(new_owner);

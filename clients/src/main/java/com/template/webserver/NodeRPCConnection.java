@@ -1,6 +1,7 @@
 package com.template.webserver;
 
 import net.corda.client.rpc.CordaRPCClient;
+import com.template.webserver.CONSTANTS;
 import net.corda.client.rpc.CordaRPCConnection;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.utilities.NetworkHostAndPort;
@@ -30,16 +31,33 @@ public class NodeRPCConnection implements AutoCloseable {
     @Value("${config.rpc.port}")
     private int rpcPort;
 
+    // private CordaRPCConnection rpcConnection;
+    // CordaRPCOps proxy;
+    // @Value("${" + CONSTANTS.CORDA_NODE_HOST + "}")
+    // private String host;
+    // @Value("${" + CONSTANTS.CORDA_USER_NAME + "}")
+    // private String username;
+    // @Value("${" + CONSTANTS.CORDA_USER_PASSWORD + "}")
+    // private String password;
+    // @Value("${" + CONSTANTS.CORDA_RPC_PORT + "}")
+    // private int rpcPort;
+
     private CordaRPCConnection rpcConnection;
-    CordaRPCOps proxy;
+    public CordaRPCOps proxy;
 
     @PostConstruct
     public void initialiseNodeRPCConnection() {
         NetworkHostAndPort rpcAddress = new NetworkHostAndPort(host, rpcPort);
         CordaRPCClient rpcClient = new CordaRPCClient(rpcAddress);
-        rpcConnection = rpcClient.start(username, password);
+        CordaRPCConnection rpcConnection = rpcClient.start(username, password);
         proxy = rpcConnection.getProxy();
     }
+    
+
+    public CordaRPCOps getProxy() {
+        return proxy;
+    }
+
 
     @PreDestroy
     public void close() {

@@ -1,3 +1,5 @@
+import { useEffect,useState } from "react";
+import axios from 'axios';
 
 export default function Login() {
 
@@ -7,18 +9,30 @@ export default function Login() {
     const [pass, setPass] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [result, setResult] = useState(false);
+    const url = "http://localhost:50011";
 
     useEffect(() => {
         result ? setLoggedIn(true) : setLoggedIn(false);
     }, [result])
 
 
+    async function onSubmit(event) {
+        event.preventDefault();
+        try {
+            axios.get(url + '/currentuser',).then(res => {
+                console.log(res.data);
+                if (hostname == res.data.host && name == res.data.username && pass == res.data.password && port == res.data.rpcPort) {
+                    localStorage.setItem("isAuthenticaed",true);
+                    localStorage.setItem("currentuser", hostname+":"+port);
+                    setResult(res.data);
+                    loggedIn ? window.location.pathname = "/login" : window.location.pathname = "/dashboard";
+                }
 
+            });
 
-
-
-
-
+        }
+        catch { }
+    }
 
 
     return (
@@ -38,7 +52,7 @@ export default function Login() {
                                     <input type="text" className="form-control" id="username" value={port} onChange={(e) => setPort(e.target.value)} required />
                                 </div>
                                 <div className="md-4">
-                                    <label htmIFor="username" className="form-label">RPC User Name</label>
+                                    <label htmlFor="username" className="form-label">RPC User Name</label>
                                     <input type="text" className="form-control" id="username" value={name} onChange={(e) => setName(e.target.value)} required />
                                 </div>
                                 <div className="mb-4">
@@ -48,11 +62,11 @@ export default function Login() {
                                 <div className=" mb-4 d-flex justify-content-between align-items-center">
                                     <div className="form-check mb-0">
                                         <input className="form-check-input me-2" type="checkbox" value="remember-me" />
-                                        <label className="form-check-label" htmIFor="remember-me">Remember me</label>
+                                        <label className="form-check-label" htmlFor="remember-me">Remember me</label>
                                     </div>
                                     <a href="/" className="text-body">Forgot password?</a>
                                 </div>
-                                <div classNam="mb-2 d-flex justify-content-end ">
+                                <div className="mb-2 d-flex justify-content-end ">
                                     <button type="submit" className="btn btn-primary">Login</button>
                                 </div>
                             </form >

@@ -1,7 +1,7 @@
 import { useEffect,useState } from "react";
 import axios from 'axios';
 
-export default function Login() {
+export default function Login(props) {
 
     const [hostname, setHostName] = useState('');
     const [port, setPort] = useState('');
@@ -9,7 +9,7 @@ export default function Login() {
     const [pass, setPass] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [result, setResult] = useState(false);
-    const url = "http://localhost:50011";
+    const url = "http://localhost:";
 
     useEffect(() => {
         result ? setLoggedIn(true) : setLoggedIn(false);
@@ -19,17 +19,19 @@ export default function Login() {
     async function onSubmit(event) {
         event.preventDefault();
         try {
-            axios.get(url + '/currentuser',).then(res => {
-                console.log(res.data);
-                if (hostname == res.data.host && name == res.data.username && pass == res.data.password && port == res.data.rpcPort) {
+            console.log(hostname);
+            console.log(port);
+            console.log(name);
+            console.log(pass);
+            const res=await axios.get(url + '/currentuser');
+            console.log(res.data);
+            
+                if (hostname == res.data.host && name == res.data.username && pass == res.data.pass && port == res.data.port) {
                     localStorage.setItem("isAuthenticaed",true);
                     localStorage.setItem("currentuser", hostname+":"+port);
                     setResult(res.data);
                     loggedIn ? window.location.pathname = "/login" : window.location.pathname = "/dashboard";
                 }
-
-            });
-
         }
         catch { }
     }

@@ -1,17 +1,17 @@
 import './App.css';
 import {BrowserRouter,Route, Routes} from 'react-router-dom';
-import Login from './componenets/Login/Login';
+import Login from './components/Login/Login';
 import { useEffect } from 'react';
-import Dashboard from './componenets/Dashboard/SupplierDashboard'
+import Dashboard from './components/Dashboard'
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
       <Routes>
-      <Route exact path="/" component={Login} />
-      <Route exact path="/login" element={<Login/>} />
-      <Route exact path="/dashboard" component={Dashboard} />
+      <Route exact path="/" element={<Login />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/dashboard" element={<Dashboard />} />
       </Routes>
       </BrowserRouter>
     </div>

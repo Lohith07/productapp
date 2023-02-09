@@ -1,15 +1,17 @@
 import { useEffect,useState } from "react";
 import axios from 'axios';
+import Dashboard from "../Dashboard";
 
-export default function Login(props) {
+export default function Login() {
 
     const [hostname, setHostName] = useState('');
     const [port, setPort] = useState('');
+    const [serverport, setServerPort] = useState('');
     const [name, setName] = useState('');
     const [pass, setPass] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [result, setResult] = useState(false);
-    const url = "http://localhost:";
+    const url = "http://localhost:50011";
 
     useEffect(() => {
         result ? setLoggedIn(true) : setLoggedIn(false);
@@ -19,13 +21,12 @@ export default function Login(props) {
     async function onSubmit(event) {
         event.preventDefault();
         try {
+            const res=await axios.get(url + '/currentuser');
+            console.log(res.data);
             console.log(hostname);
             console.log(port);
             console.log(name);
             console.log(pass);
-            const res=await axios.get(url + '/currentuser');
-            console.log(res.data);
-            
                 if (hostname == res.data.host && name == res.data.username && pass == res.data.pass && port == res.data.port) {
                     localStorage.setItem("isAuthenticaed",true);
                     localStorage.setItem("currentuser", hostname+":"+port);
@@ -54,6 +55,10 @@ export default function Login(props) {
                                     <input type="text" className="form-control" id="username" value={port} onChange={(e) => setPort(e.target.value)} required />
                                 </div>
                                 <div className="md-4">
+                                    <label htmlFor="nodeport" className="form-label">Server Port</label>
+                                    <input type="text" className="form-control" id="username" value={serverport} onChange={(e) => setServerPort(e.target.value)} required />
+                                </div>
+                                <div className="md-4">
                                     <label htmlFor="username" className="form-label">RPC User Name</label>
                                     <input type="text" className="form-control" id="username" value={name} onChange={(e) => setName(e.target.value)} required />
                                 </div>
@@ -76,6 +81,7 @@ export default function Login(props) {
                     </div >
                 </div >
             </section >
+            <Dashboard  id="dashboard" serverport={serverport}/> 
         </main >
     )
 }

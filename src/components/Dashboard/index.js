@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 import SupplierDashboard from './SupplierDashboard'
 import ManufacturerDashboard from './ManufacturerDashboard';
 import WholesalerDashboard from './WholesalerDashboard';
+import Login from "../Login/Login";
 import axios from "axios";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const [user, setUser] = useState('');
-    const url = "http://localhost:50011/currentuser";
+    const {serverport}=props;
+    const currentuser = localStorage.getItem("currentuser");
+    console.log(serverport);
+    const url = "http://localhost:"+serverport;
+    console.log(url);
 
-
-    async function getcurrenthost(props) {
-        const currentuser = localStorage.getItem("currentuser");
+    async function getcurrenthost() {
+        
         console.log(currentuser);
-        const res = await axios.get(url);
+        const res = await axios.get(url+serverport+"/currentuser");
+        console.log(res.data);
+        Login.SpinnerControl(true);
+        
         const host = res.data.host + ":" + res.data.port;
         console.log(host);
         

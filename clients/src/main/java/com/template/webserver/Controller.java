@@ -157,7 +157,7 @@ public class Controller {
         myMap.put("username", username);
         myMap.put("pass", password);
         myMap.put("port", rpcPort);
-        myMap.put("port", serverPort);
+        myMap.put("serverport", serverPort);
 
         for(Map.Entry m : myMap.entrySet()){    
             System.out.println(m.getKey()+" "+m.getValue());    

@@ -4,13 +4,11 @@ function Header() {
             <header className="header">
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                     <div className="container-fluid">
-                        <a className="navbar-brand helvetica-medium" href="/dashboard">Product CordApp</a>
+                        <a className="navbar-brand helvetica-medium" href="/dashboard">PRODUCT CORDAPP</a>
 
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded=" false" aria-label="Togglenavigation">
-                            <span className="navbar-toggler-icon"> </span>
-                        </button>
+                        
                         <div className="collapse navbar-collapse justify-content-end helvetica-light" id="navbarSupportedContent">
-                            <ul className="navbar-nav me-3 mb-2 mb-Ig-0">
+                            <ul className="navbar-nav me-3 mb-2 mb-Ig-0" align="right">
                                 <li className="nav-item">
                                     <a className="nav-link active" aria-current="page" href='/'>Home</a>
                                 </li>

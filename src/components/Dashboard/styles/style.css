@@ -1,0 +1,438 @@
+body {
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #F0F0F0;
+    font-family: 'Helvetica 45 Light', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+select option {
+    margin: .5rem auto;
+}
+
+/*fonts*/
+.helvetica-light {
+    font-family: 'Helvetica 45 Light', sans-serif;
+}
+
+.helvetica-medium {
+    font-family: 'Helvetica 65 Medium', sans-serif;
+}
+
+/*colors*/
+.main-color {
+    color: #343A40;
+}
+
+.sub-color {
+    color: #212529;
+}
+
+/*login page*/
+
+.login-section .container-fluid {
+    background: #0000009e;
+    min-height: 750px;
+}
+
+.login-section .login-block {
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    max-width: 560px;
+}
+
+.login-section .login-block h3 {
+    font-family: 'Helvetica 65 Medium', sans-serif;
+    color: #343A40;
+}
+
+.login-section .login-header,
+.login-section .login-form {
+    font-family: 'Helvetica 45 Light', sans-serif;
+}
+
+.login-section .login-header .h6,
+.login-section .login-form {
+    color: #212529;
+}
+
+/*header Navbar*/
+/*breadcrumb*/
+.breadcrumb-section {
+    background-color: #E0E3E7;
+}
+
+.breadcrumb-section .breadcrumb-item.active {
+    color: #343A40;
+}
+
+/*dashboard*/
+.page-title .title {
+    border-bottom: 1px solid #E0E0E0;
+}
+
+/*participants table*/
+.table-container .block-filters .filter select {
+    max-width: 200px;
+    color: #343A40;
+}
+
+/*table*/
+table thead th {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    border-color: #dee2e6 !important;
+}
+
+table thead .sorting {
+    position: relative;
+    cursor: pointer;
+}
+
+table thead .sorting::after {
+    position: absolute;
+    right: -0.1em;
+    content: "↑";
+}
+
+/*table-colors*/
+table thead .sorting.asc::after {
+    color: #B0B6BA;
+}
+
+table thead .sorting.desc::after {
+    color: #0d6efd;
+}
+
+.manufacturer,
+.admin,
+.retailer,
+.distributor,
+.wholesaler,
+.pharmacy,
+.in-transit {
+    color: #fff;
+    padding: .2rem;
+    border-radius: 4px;
+}
+
+.manufacturer {
+    background-color: #3CC290;
+}
+
+.distributor {
+    background-color: #F9C219;
+}
+
+.wholesaler {
+    background-color: #F49579;
+}
+
+.pharmacy {
+    background-color: #A888E3;
+}
+.retailer{
+    background-color: #0d6efd;
+    
+}
+.admin{
+    background-color: #E53935;
+}
+.in-transit {
+    background-color: #38A5F2;
+}
+
+/*modal*/
+.modal-content {
+    min-width: 650px;
+}
+
+.modal .modal-body form .row {
+    margin-bottom: 1rem !important;
+}
+
+/*modal form*/
+form .status-check {
+    min-width: 170px;
+    max-width: 200px;
+}
+
+form input.fileupload[type=file] {
+    color: #B0B6BA
+}
+
+form input.fileupload[type=file]::file-selector-button {
+    border: 2px solid #007BFF;
+    color: #007BFF;
+    padding: .2em .4em;
+    border-radius: .2em;
+    background-color: #fff;
+    transition: 1s;
+}
+
+form input.fileupload[type=file]::file-selector-button:hover {
+    opacity: 0.6;
+}
+
+/*toast messages*/
+.toast-block {
+    position: absolute;
+    top: 6rem;
+    left: 40%;
+    z-index: 11;
+}
+
+.toast-block .toast.success {
+    background: #D4EDDA;
+    border-color: #D4EDDA;
+    color: #155724;
+}
+
+.toast-block .toast.failed {
+    background: #E97B86;
+    border-color: #E97B86;
+    color: #fff;
+}
+
+/*Manufacturer - Dashboard*/
+.count-block .count-img {
+    border-right: 1px solid #E0E0E0;
+}
+
+.profile-content .profile-details h6 {
+    min-width: 90px;
+}
+
+.data-count-section .count-block img {
+    max-width: 110px;
+}
+
+/* Product Tracking table colors*/
+.complete {
+    background-color: #74C686;
+}
+
+.processing {
+    background-color: #FFD75E;
+}
+
+.not-available {
+    background-color: #E97B86;
+}
+
+.complete,
+.processing,
+.not-available {
+    color: #fff;
+    padding: .2rem;
+    border-radius: 4px;
+}
+
+/* Shipment Progress*/
+.shipment-block .block-header-text {
+    border-bottom: 1px solid #E0E0E0;
+}
+
+/*Distributor - Dashboard*/
+form input#date1[type=date]::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+    border: 2px solid #007BFF;
+    color: #fff;
+    padding: .2em .4em;
+    border-radius: .2em;
+    background-color: #007BFF;
+    transition: 1s;
+}
+
+/* Shipment Progress bar*/
+#progressbar {
+    position: absolute;
+    left: 50%;
+    color: #E53935
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 8px;
+    font-weight: 400;
+    margin-bottom: 36px;
+    position: relative;
+}
+
+#progressbar li:first-child {
+    top: 14rem;
+}
+
+#progressbar li:nth-child(2) {
+    top: 41rem;
+}
+
+#progressbar li:nth-child(3) {
+    top: 66rem;
+}
+
+#progressbar li:nth-child(4) {
+    top: 88rem;
+}
+
+#progressbar li:before {
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+    display: block;
+    font-family: FontAwesome;
+    content: "\f252";
+    color: #fff;
+    font-size: 20px;
+    background: #FFC107;
+    border: 2px solid #FFC107;
+    border-radius: 50%;
+    margin: auto;
+}
+
+#progressbar li:after {
+    content: '';
+    width: 3px;
+    height: 66px;
+    background: transparent;
+    border: 2px dashed #FFC107;
+    position: absolute;
+    left: 50%;
+    top: 15px;
+}
+
+#progressbar li:first-child:after {
+    top: -14rem;
+    height: 14rem;
+}
+
+#progressbar li:nth-child(2):after {
+    top: -29.3rem;
+    height: 29.3rem;
+}
+
+#progressbar li:nth-child(3):after {
+    top: -27.3rem;
+    height: 27.3rem;
+}
+
+#progressbar li:last-child:after {
+    top: -24.3rem;
+    height: 24.3rem;
+}
+
+#progressbar li.active:after {
+    background: #28A745;
+    border: 2px solid #28A745;
+}
+
+#progressbar li.active:before {
+    background: #28A745;
+    border: 2px solid #28A745;
+    font-family: FontAwesome;
+    content: "\f00c";
+}
+
+/* media queries*/
+/* media queries screen below 767px*/
+@media (min-width: 768px) and (max-width: 890px) {
+
+    /* Shipment Progress bar*/
+    #progressbar li:first-child {
+        top: 18rem;
+    }
+
+    #progressbar li:nth-child(2) {
+        top: 47rem;
+    }
+
+    #progressbar li:nth-child(3) {
+        top: 76rem;
+    }
+
+    #progressbar li:nth-child(4) {
+        top: 102rem;
+    }
+
+    #progressbar li:first-child:after {
+        top: -18rem;
+        height: 18rem;
+    }
+
+    #progressbar li:nth-child(2):after {
+        top: -31.3rem;
+        height: 31.3rem;
+    }
+
+    #progressbar li:nth-child(3):after {
+        top: -31.3rem;
+        height: 31.3rem;
+    }
+
+    #progressbar li:last-child:after {
+        top: -28.3rem;
+        height: 28.3rem;
+    }
+
+}
+
+@media screen and (max-width: 767.55px) {
+
+    /* Shipment Progress bar*/
+    #progressbar {
+        left: 1%;
+    }
+
+    #progressbar li:last-child:after {
+        top: -24.3rem;
+        height: 24.3rem;
+    }
+}
+
+@media screen and (max-width: 457px) {
+
+    /* Shipment Progress bar*/
+    #progressbar {
+        left: 0%;
+    }
+
+    #progressbar li:first-child {
+        top: 18rem;
+    }
+
+    #progressbar li:nth-child(2) {
+        top: 47rem;
+    }
+
+    #progressbar li:nth-child(3) {
+        top: 76rem;
+    }
+
+    #progressbar li:nth-child(4) {
+        top: 102rem;
+    }
+
+    #progressbar li:first-child:after {
+        top: -18rem;
+        height: 18rem;
+    }
+
+    #progressbar li:nth-child(2):after {
+        top: -31.3rem;
+        height: 31.3rem;
+    }
+
+    #progressbar li:nth-child(3):after {
+        top: -31.3rem;
+        height: 31.3rem;
+    }
+
+    #progressbar li:last-child:after {
+        top: -28.3rem;
+        height: 28.3rem;
+    }
+
+}

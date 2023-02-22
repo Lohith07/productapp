@@ -5,27 +5,16 @@ import WholesalerDashboard from './WholesalerDashboard';
 import Login from "../Login/Login";
 import axios from "axios";
 
-export default function Dashboard(props) {
+export default function Dashboard() {
     const [user, setUser] = useState('');
-    const {serverport}=props;
-    const currentuser = localStorage.getItem("currentuser");
-    console.log(serverport);
-    const url = "http://localhost:"+serverport;
-    console.log(url);
+    const host = localStorage.getItem("host");
+    const url="http://"+host+"/currentuser";
 
     async function getcurrenthost() {
+    
+        const res = await axios.get(url);
+        setUser(res.data.port);
         
-        console.log(currentuser);
-        const res = await axios.get(url+serverport+"/currentuser");
-        console.log(res.data);
-        Login.SpinnerControl(true);
-        
-        const host = res.data.host + ":" + res.data.port;
-        console.log(host);
-        
-        if (host == currentuser) {
-            setUser(res.data.port);
-        }
     }
     useEffect(() => {
         getcurrenthost();

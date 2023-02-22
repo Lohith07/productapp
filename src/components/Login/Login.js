@@ -11,25 +11,23 @@ export default function Login() {
     const [pass, setPass] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
     const [result, setResult] = useState(false);
-    const url = "http://localhost:50011";
+    const url = "http://localhost:";
 
     useEffect(() => {
         result ? setLoggedIn(true) : setLoggedIn(false);
     }, [result])
 
+    useEffect(() => {
+        localStorage.removeItem('host');
+    }, [])
 
     async function onSubmit(event) {
         event.preventDefault();
         try {
-            const res=await axios.get(url + '/currentuser');
-            console.log(res.data);
-            console.log(hostname);
-            console.log(port);
-            console.log(name);
-            console.log(pass);
+            const res=await axios.get(url + serverport+'/currentuser');
                 if (hostname == res.data.host && name == res.data.username && pass == res.data.pass && port == res.data.port) {
                     localStorage.setItem("isAuthenticaed",true);
-                    localStorage.setItem("currentuser", hostname+":"+port);
+                    localStorage.setItem("host", hostname+":"+serverport);
                     setResult(res.data);
                     loggedIn ? window.location.pathname = "/login" : window.location.pathname = "/dashboard";
                 }
@@ -74,14 +72,13 @@ export default function Login() {
                                     <a href="/" className="text-body">Forgot password?</a>
                                 </div>
                                 <div className="mb-2 d-flex justify-content-end ">
-                                    <button type="submit" className="btn btn-primary">Login</button>
+                                    <button type="submit"  align="center" className="btn btn-primary">Login</button>
                                 </div>
                             </form >
                         </div >
                     </div >
                 </div >
             </section >
-            <Dashboard  id="dashboard" serverport={serverport}/> 
         </main >
     )
 }
